@@ -1,6 +1,6 @@
 {
   "name": "synthdata-gen",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Generate and validate synthetic training data using any LLM",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,5 +21,14 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
+    "eslint": "^10.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
   }
 }
