@@ -3,6 +3,7 @@
 Generate, validate, deduplicate, and export synthetic training data for LLM fine-tuning and evaluation.
 
 [![npm version](https://img.shields.io/npm/v/synthdata-gen.svg)](https://www.npmjs.com/package/synthdata-gen)
+[![npm downloads](https://img.shields.io/npm/dt/synthdata-gen.svg)](https://www.npmjs.com/package/synthdata-gen)
 [![license](https://img.shields.io/npm/l/synthdata-gen.svg)](https://github.com/SiluPanda/synthdata-gen/blob/master/LICENSE)
 [![node](https://img.shields.io/node/v/synthdata-gen.svg)](https://nodejs.org)
 [![types](https://img.shields.io/npm/types/synthdata-gen.svg)](https://www.npmjs.com/package/synthdata-gen)
