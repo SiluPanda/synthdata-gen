@@ -7,36 +7,36 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 ## Phase 0: Project Setup and Scaffolding
 
 - [ ] **Install runtime dependencies** — Add `zod` as an optional peer dependency in `package.json` (`"peerDependencies": { "zod": "^3.22.0" }` with `"peerDependenciesMeta": { "zod": { "optional": true } }`). | Status: not_done
-- [ ] **Install dev dependencies** — Add `typescript`, `vitest`, and `eslint` as dev dependencies. Configure ESLint for the project. | Status: not_done
+- [x] **Install dev dependencies** — Add `typescript`, `vitest`, and `eslint` as dev dependencies. Configure ESLint for the project. | Status: done
 - [ ] **Add optional peer dependencies for LLM SDKs** — Add `openai` and `@anthropic-ai/sdk` as optional peer dependencies in `package.json`. | Status: not_done
 - [ ] **Configure package.json bin entry** — Add `"bin": { "synthdata-gen": "dist/cli.js" }` to `package.json` for CLI support. | Status: not_done
 - [ ] **Create source file structure** — Create the directory structure specified in Section 21: `src/schema/`, `src/prompt/`, `src/parse/`, `src/dedup/`, `src/export/`, `src/llm/`, `src/__tests__/`. Create empty placeholder files for each module. | Status: not_done
-- [ ] **Set up vitest configuration** — Create `vitest.config.ts` (or configure in `package.json`) for the test runner. Ensure it finds tests in `src/__tests__/`. | Status: not_done
+- [x] **Set up vitest configuration** — Create `vitest.config.ts` (or configure in `package.json`) for the test runner. Ensure it finds tests in `src/__tests__/`. | Status: done
 
 ---
 
 ## Phase 1: Core Types and Interfaces
 
-- [ ] **Define `Message` interface** — Define the `Message` type with `role: 'system' | 'user' | 'assistant'` and `content: string` in `src/llm/interface.ts`. | Status: not_done
-- [ ] **Define `LlmCallOptions` interface** — Define `temperature?: number`, `maxTokens?: number`, `jsonMode?: boolean` in `src/llm/interface.ts`. | Status: not_done
-- [ ] **Define `LlmResponse` interface** — Define `content: string` and optional `usage: { promptTokens, completionTokens, totalTokens }` in `src/llm/interface.ts`. | Status: not_done
-- [ ] **Define `LlmFunction` type** — Define as `(messages: Message[], options?: LlmCallOptions) => Promise<LlmResponse>` in `src/llm/interface.ts`. | Status: not_done
-- [ ] **Define `GeneratedExample<T>` type** — Define the generic type with `_meta?` containing `id`, `index`, `isNegative`, `repaired`, `batchIndex`, and `diversityContext` in `src/types.ts`. | Status: not_done
-- [ ] **Define `GenerationResult<T>` interface** — Define with `data: GeneratedExample<T>[]` and `stats: GenerationStats` in `src/types.ts`. | Status: not_done
+- [x] **Define `Message` interface** — Define the `Message` type with `role: 'system' | 'user' | 'assistant'` and `content: string` in `src/llm/interface.ts`. | Status: done
+- [x] **Define `LlmCallOptions` interface** — Define `temperature?: number`, `maxTokens?: number`, `jsonMode?: boolean` in `src/llm/interface.ts`. | Status: done
+- [x] **Define `LlmResponse` interface** — Define `content: string` and optional `usage: { promptTokens, completionTokens, totalTokens }` in `src/llm/interface.ts`. | Status: done
+- [x] **Define `LlmFunction` type** — Define as `(messages: Message[], options?: LlmCallOptions) => Promise<LlmResponse>` in `src/llm/interface.ts`. | Status: done
+- [x] **Define `GeneratedExample<T>` type** — Define the generic type with `_meta?` containing `id`, `index`, `isNegative`, `repaired`, `batchIndex`, and `diversityContext` in `src/types.ts`. | Status: done
+- [x] **Define `GenerationResult<T>` interface** — Define with `data: GeneratedExample<T>[]` and `stats: GenerationStats` in `src/types.ts`. | Status: done
 - [ ] **Define `GenerationStats` interface** — Define all fields: `total`, `valid`, `invalid`, `deduped`, `final`, `llmCalls`, `tokens` (prompt/completion/total), `cost` (promptTokens/completionTokens/totalCost/currency), `validationErrors`, `invalidExamples`, `categoryDistribution`, `diversityScore`, `durationMs` in `src/types.ts`. | Status: not_done
-- [ ] **Define `ValidationResult` and `ValidationError` interfaces** — Define `valid`, `index`, `errors[]` with `path`, `message`, `code` in `src/types.ts`. | Status: not_done
-- [ ] **Define `DedupResult<T>` interface** — Define `data`, `removed`, `pairs` (as `[number, number, number][]`) in `src/types.ts`. | Status: not_done
+- [x] **Define `ValidationResult` and `ValidationError` interfaces** — Define `valid`, `index`, `errors[]` with `path`, `message`, `code` in `src/types.ts`. | Status: done
+- [x] **Define `DedupResult<T>` interface** — Define `data`, `removed`, `pairs` (as `[number, number, number][]`) in `src/types.ts`. | Status: done
 - [ ] **Define `ExportFormat` type** — Define as union `'openai' | 'alpaca' | 'sharegpt' | 'jsonl' | 'csv' | 'eval-dataset' | 'custom'` in `src/types.ts`. | Status: not_done
 - [ ] **Define `GenerateOptions<T>` interface** — Define all generation options: `llm`, `count`, `batchSize`, `systemPrompt`, `additionalInstructions`, `promptTemplate`, `templateVars`, `seeds`, `diversity`, `validation`, `retry`, `dedup`, `invalidHandling`, `structuredOutput`, `costTracking`, `onProgress`, `signal` in `src/types.ts`. | Status: not_done
 - [ ] **Define `DiversityConfig` interface** — Define `temperature` (min/max/strategy), `topics`, `balanceField`, `seedRotation`, `seedsPerBatch`, `personas`, `negativeExampleRatio`, `negativeInstructions`, `constraintVariation` in `src/types.ts`. | Status: not_done
 - [ ] **Define `ValidationConfig` interface** — Define `minFieldLength`, `maxFieldLength`, `heuristics` (nonEmpty, noPlaceholder, noDuplicateFields, minWordCount, noRepetition, languageCheck), `custom` validators in `src/types.ts`. | Status: not_done
-- [ ] **Define `RetryConfig` interface** — Define `maxRetries`, `includeFeedback`, `backoff` (none/linear/exponential), `backoffMs` in `src/types.ts`. | Status: not_done
-- [ ] **Define `DedupOptions` interface** — Define `strategy`, `threshold`, `ngramSize`, `fields`, `embedder`, `existingData`, `minhash` (numHashes/numBands) in `src/types.ts`. | Status: not_done
-- [ ] **Define `CostConfig` interface** — Define `promptTokenCost`, `completionTokenCost`, `currency` in `src/types.ts`. | Status: not_done
+- [x] **Define `RetryConfig` interface** — Define `maxRetries`, `includeFeedback`, `backoff` (none/linear/exponential), `backoffMs` in `src/types.ts`. | Status: done
+- [x] **Define `DedupOptions` interface** — Define `strategy`, `threshold`, `ngramSize`, `fields`, `embedder`, `existingData`, `minhash` (numHashes/numBands) in `src/types.ts`. | Status: done
+- [x] **Define `CostConfig` interface** — Define `promptTokenCost`, `completionTokenCost`, `currency` in `src/types.ts`. | Status: done
 - [ ] **Define `ProgressInfo` interface** — Define `generated`, `valid`, `target`, `batchIndex`, `percentComplete`, `elapsedMs` in `src/types.ts`. | Status: not_done
 - [ ] **Define `GeneratorConfig<T>` interface** — Extend `Omit<GenerateOptions<T>, 'count'>` with `schema` field in `src/types.ts`. | Status: not_done
 - [ ] **Define `DataGenerator<T>` interface** — Define `generate()`, `validate()`, `deduplicate()`, `export()`, and readonly `config` in `src/types.ts`. | Status: not_done
-- [ ] **Export all public types from `src/index.ts`** — Re-export all type definitions from `src/types.ts` and `src/llm/interface.ts`. | Status: not_done
+- [x] **Export all public types from `src/index.ts`** — Re-export all type definitions from `src/types.ts` and `src/llm/interface.ts`. | Status: done
 
 ---
 
@@ -50,11 +50,11 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 - [ ] **Handle `z.array(t)` introspection** — Extract element type and min/max items constraints. | Status: not_done
 - [ ] **Handle nested `z.object({...})` introspection** — Recursively introspect nested object schemas. | Status: not_done
 - [ ] **Handle `z.optional(t)` and `.default(v)` introspection** — Detect optional fields and default values. | Status: not_done
-- [ ] **Implement schema-to-prompt compiler** — In `src/schema/compiler.ts`, implement the conversion algorithm that produces a natural language JSON template from the introspected schema. Each field becomes `"fieldName": <type> (<constraints>) - <description>`. | Status: not_done
-- [ ] **Handle enum fields in prompt output** — Render enum fields as `one of ["val1", "val2", ...]` in the prompt. | Status: not_done
+- [x] **Implement schema-to-prompt compiler** — In `src/schema/compiler.ts`, implement the conversion algorithm that produces a natural language JSON template from the introspected schema. Each field becomes `"fieldName": <type> (<constraints>) - <description>`. | Status: done
+- [x] **Handle enum fields in prompt output** — Render enum fields as `one of ["val1", "val2", ...]` in the prompt. | Status: done
 - [ ] **Handle nested objects in prompt output** — Indent and recurse for nested object fields in the prompt template. | Status: not_done
-- [ ] **Handle arrays in prompt output** — Describe arrays as `array of <element type> (min N items, max M items)`. | Status: not_done
-- [ ] **Mark optional fields in prompt output** — Annotate optional fields with `(optional)` in the prompt template. | Status: not_done
+- [x] **Handle arrays in prompt output** — Describe arrays as `array of <element type> (min N items, max M items)`. | Status: done
+- [x] **Mark optional fields in prompt output** — Annotate optional fields with `(optional)` in the prompt template. | Status: done
 - [ ] **Implement JSON Schema to Zod conversion** — In `src/schema/json-schema.ts`, convert JSON Schema objects to equivalent Zod schemas. Support: `type: "string"/"number"/"integer"/"boolean"/"array"/"object"`, `enum`, `minLength`/`maxLength`, `minimum`/`maximum`, `minItems`/`maxItems`, `pattern`, `required`, `description`, `default`. | Status: not_done
 - [ ] **Handle `required` fields in JSON Schema conversion** — Non-required fields should be wrapped in `z.optional()`. | Status: not_done
 - [ ] **Handle nested objects in JSON Schema conversion** — Recursively convert nested `type: "object"` properties. | Status: not_done
@@ -62,11 +62,11 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ### Schema Tests
 
-- [ ] **Test schema-to-prompt for string fields with constraints** — Verify prompt output includes min/max length and description for string fields. | Status: not_done
-- [ ] **Test schema-to-prompt for enum fields** — Verify prompt output lists all enum values. | Status: not_done
+- [x] **Test schema-to-prompt for string fields with constraints** — Verify prompt output includes min/max length and description for string fields. | Status: done
+- [x] **Test schema-to-prompt for enum fields** — Verify prompt output lists all enum values. | Status: done
 - [ ] **Test schema-to-prompt for nested objects** — Verify prompt output correctly indents and describes nested structures. | Status: not_done
-- [ ] **Test schema-to-prompt for arrays** — Verify prompt output describes element type and item count constraints. | Status: not_done
-- [ ] **Test schema-to-prompt for optional and default fields** — Verify prompt output annotates optional fields and shows defaults. | Status: not_done
+- [x] **Test schema-to-prompt for arrays** — Verify prompt output describes element type and item count constraints. | Status: done
+- [x] **Test schema-to-prompt for optional and default fields** — Verify prompt output annotates optional fields and shows defaults. | Status: done
 - [ ] **Test JSON Schema to Zod conversion** — Verify all supported JSON Schema features convert to equivalent Zod schemas. Validate that the converted schema produces the same parse results as a hand-written Zod equivalent. | Status: not_done
 - [ ] **Test JSON Schema `required` handling** — Verify that non-required fields become `z.optional()`. | Status: not_done
 - [ ] **Write tests in `src/__tests__/schema.test.ts`** — Cover all schema compiler and JSON Schema conversion tests. | Status: not_done
@@ -75,19 +75,19 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ## Phase 3: Prompt Builder
 
-- [ ] **Implement default system prompt template** — In `src/prompt/templates.ts`, define the default system prompt string with the `{schema_description}` placeholder as specified in Section 7. | Status: not_done
+- [x] **Implement default system prompt template** — In `src/prompt/templates.ts`, define the default system prompt string with the `{schema_description}` placeholder as specified in Section 7. | Status: done
 - [ ] **Implement prompt builder** — In `src/prompt/builder.ts`, assemble the full messages array: `[system, ...seedExamples, user]`. Substitute template placeholders (`{schema_description}`, `{additional_instructions}`, `{diversity_instructions}`, `{batch_size}`, `{topic}`, `{category}`, `{seed_examples}`, `{example_number}`, and custom `templateVars`). | Status: not_done
-- [ ] **Handle custom system prompt override** — When `systemPrompt` is provided, use it instead of the default. When `additionalInstructions` is provided, append it to the default. | Status: not_done
+- [x] **Handle custom system prompt override** — When `systemPrompt` is provided, use it instead of the default. When `additionalInstructions` is provided, append it to the default. | Status: done
 - [ ] **Handle custom prompt template** — When `promptTemplate.system` and/or `promptTemplate.user` are provided, use them with variable substitution. | Status: not_done
-- [ ] **Format seed examples as message pairs** — Convert each seed example into a `user: "Generate a training example."` / `assistant: <JSON>` message pair. | Status: not_done
-- [ ] **Handle batch generation prompts** — When `batchSize > 1`, modify the user message to request a JSON array of N examples. | Status: not_done
+- [x] **Format seed examples as message pairs** — Convert each seed example into a `user: "Generate a training example."` / `assistant: <JSON>` message pair. | Status: done
+- [x] **Handle batch generation prompts** — When `batchSize > 1`, modify the user message to request a JSON array of N examples. | Status: done
 - [ ] **Implement diversity instruction generation** — In `src/prompt/diversity.ts`, generate dynamic diversity instructions based on the active `DiversityConfig` (topic, category, persona, constraint, negative example). Append these to the user message. | Status: not_done
 
 ### Prompt Tests
 
 - [ ] **Test prompt builder includes all components** — Verify system prompt, schema description, seed examples, and diversity instructions are all present in the built prompt. | Status: not_done
-- [ ] **Test custom system prompt replaces default** — Verify that setting `systemPrompt` fully replaces the default template. | Status: not_done
-- [ ] **Test additional instructions are appended** — Verify `additionalInstructions` are appended after the default system prompt. | Status: not_done
+- [x] **Test custom system prompt replaces default** — Verify that setting `systemPrompt` fully replaces the default template. | Status: done
+- [x] **Test additional instructions are appended** — Verify `additionalInstructions` are appended after the default system prompt. | Status: done
 - [ ] **Test template variable substitution** — Verify all placeholder variables are correctly replaced in custom templates. | Status: not_done
 - [ ] **Test seed example formatting** — Verify seeds are converted to user/assistant message pairs correctly. | Status: not_done
 - [ ] **Test batch prompt requests JSON array** — Verify the user message changes for `batchSize > 1`. | Status: not_done
@@ -97,55 +97,55 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ## Phase 4: JSON Parser and Extractor
 
-- [ ] **Implement JSON extraction from bare JSON** — In `src/parse/extractor.ts`, parse responses that are bare JSON objects or arrays. | Status: not_done
-- [ ] **Implement JSON extraction from markdown fences** — Handle JSON wrapped in `` ```json ... ``` `` or `` ``` ... ``` `` code fences. | Status: not_done
-- [ ] **Implement JSON extraction from mixed text** — Handle JSON embedded in explanatory text (find JSON objects/arrays within prose). | Status: not_done
+- [x] **Implement JSON extraction from bare JSON** — In `src/parse/extractor.ts`, parse responses that are bare JSON objects or arrays. | Status: done
+- [x] **Implement JSON extraction from markdown fences** — Handle JSON wrapped in `` ```json ... ``` `` or `` ``` ... ``` `` code fences. | Status: done
+- [x] **Implement JSON extraction from mixed text** — Handle JSON embedded in explanatory text (find JSON objects/arrays within prose). | Status: done
 - [ ] **Implement multi-object extraction** — Handle multiple JSON objects separated by newlines in a single response. | Status: not_done
-- [ ] **Handle malformed JSON gracefully** — Return parse errors for partial objects, trailing commas, and other malformed JSON. Do not throw. | Status: not_done
-- [ ] **Handle empty responses** — Return an appropriate error when the LLM response is empty or contains no JSON. | Status: not_done
-- [ ] **Handle structured output mode** — When `structuredOutput` is true, skip JSON extraction and parse the entire response as JSON directly. | Status: not_done
+- [x] **Handle malformed JSON gracefully** — Return parse errors for partial objects, trailing commas, and other malformed JSON. Do not throw. | Status: done
+- [x] **Handle empty responses** — Return an appropriate error when the LLM response is empty or contains no JSON. | Status: done
+- [x] **Handle structured output mode** — When `structuredOutput` is true, skip JSON extraction and parse the entire response as JSON directly. | Status: done
 
 ### Parser Tests
 
-- [ ] **Test extraction of bare JSON object** — Verify a plain `{ ... }` response is correctly parsed. | Status: not_done
-- [ ] **Test extraction of bare JSON array** — Verify a plain `[ ... ]` response is correctly parsed into individual objects. | Status: not_done
-- [ ] **Test extraction from markdown code fences** — Verify JSON inside `` ```json ... ``` `` is correctly extracted. | Status: not_done
-- [ ] **Test extraction from mixed text** — Verify JSON is found within surrounding prose text. | Status: not_done
+- [x] **Test extraction of bare JSON object** — Verify a plain `{ ... }` response is correctly parsed. | Status: done
+- [x] **Test extraction of bare JSON array** — Verify a plain `[ ... ]` response is correctly parsed into individual objects. | Status: done
+- [x] **Test extraction from markdown code fences** — Verify JSON inside `` ```json ... ``` `` is correctly extracted. | Status: done
+- [x] **Test extraction from mixed text** — Verify JSON is found within surrounding prose text. | Status: done
 - [ ] **Test multi-object extraction** — Verify multiple JSON objects separated by newlines are all extracted. | Status: not_done
-- [ ] **Test malformed JSON returns parse error** — Verify partial/broken JSON returns structured error, not exception. | Status: not_done
-- [ ] **Test empty response handling** — Verify empty string or whitespace-only returns appropriate error. | Status: not_done
+- [x] **Test malformed JSON returns parse error** — Verify partial/broken JSON returns structured error, not exception. | Status: done
+- [x] **Test empty response handling** — Verify empty string or whitespace-only returns appropriate error. | Status: done
 - [ ] **Write tests in `src/__tests__/parse.test.ts`** — Cover all JSON extraction and parsing tests. | Status: not_done
 
 ---
 
 ## Phase 5: Schema Validation and Quality Heuristics
 
-- [ ] **Implement schema validation using Zod `safeParse`** — In `src/parse/validator.ts`, validate each parsed example against the Zod schema. Return structured `ValidationResult` with field paths, messages, and codes. | Status: not_done
-- [ ] **Implement global string length constraints** — Apply `validation.minFieldLength` and `validation.maxFieldLength` to all string fields in the example, independent of per-field schema constraints. | Status: not_done
-- [ ] **Implement `nonEmpty` heuristic** — Check that all required string fields contain non-whitespace content. Enabled by default. | Status: not_done
-- [ ] **Implement `noPlaceholder` heuristic** — Check that fields do not contain placeholder text ("Lorem ipsum", "Example text", "TODO", "[insert here]", etc.). Enabled by default. | Status: not_done
-- [ ] **Implement `noDuplicateFields` heuristic** — Check that specified field pairs (e.g., question vs answer) have different content. | Status: not_done
-- [ ] **Implement `minWordCount` heuristic** — Check that specified string fields have at least N words. Disabled by default. | Status: not_done
+- [x] **Implement schema validation using Zod `safeParse`** — In `src/parse/validator.ts`, validate each parsed example against the Zod schema. Return structured `ValidationResult` with field paths, messages, and codes. | Status: done
+- [x] **Implement global string length constraints** — Apply `validation.minFieldLength` and `validation.maxFieldLength` to all string fields in the example, independent of per-field schema constraints. | Status: done
+- [x] **Implement `nonEmpty` heuristic** — Check that all required string fields contain non-whitespace content. Enabled by default. | Status: done
+- [x] **Implement `noPlaceholder` heuristic** — Check that fields do not contain placeholder text ("Lorem ipsum", "Example text", "TODO", "[insert here]", etc.). Enabled by default. | Status: done
+- [x] **Implement `noDuplicateFields` heuristic** — Check that specified field pairs (e.g., question vs answer) have different content. | Status: done
+- [x] **Implement `minWordCount` heuristic** — Check that specified string fields have at least N words. Disabled by default. | Status: done
 - [ ] **Implement `noRepetition` heuristic** — Check that fields do not contain excessive repeated phrases or sentences. Disabled by default. | Status: not_done
 - [ ] **Implement `languageCheck` heuristic** — Check that fields are in the expected language using a user-provided language detection function. Disabled by default. | Status: not_done
-- [ ] **Implement custom validator support** — Run user-provided custom validation functions after schema and heuristic validation. Each custom validator returns `{ valid, message? }`. | Status: not_done
-- [ ] **Classify parsed examples** — Classify each example as `valid`, `invalid`, or `unparseable` based on parse and validation results. | Status: not_done
+- [x] **Implement custom validator support** — Run user-provided custom validation functions after schema and heuristic validation. Each custom validator returns `{ valid, message? }`. | Status: done
+- [x] **Classify parsed examples** — Classify each example as `valid`, `invalid`, or `unparseable` based on parse and validation results. | Status: done
 
 ### Validation Tests
 
-- [ ] **Test valid example passes validation** — Verify a correctly shaped example returns `valid: true`. | Status: not_done
-- [ ] **Test invalid type fails validation** — Verify wrong field types produce appropriate error messages with paths. | Status: not_done
-- [ ] **Test min/max string length enforcement** — Verify strings below min or above max length fail with correct error. | Status: not_done
-- [ ] **Test enum validation** — Verify invalid enum values fail with the list of allowed values in the error. | Status: not_done
-- [ ] **Test optional field handling** — Verify that missing optional fields pass validation. | Status: not_done
+- [x] **Test valid example passes validation** — Verify a correctly shaped example returns `valid: true`. | Status: done
+- [x] **Test invalid type fails validation** — Verify wrong field types produce appropriate error messages with paths. | Status: done
+- [x] **Test min/max string length enforcement** — Verify strings below min or above max length fail with correct error. | Status: done
+- [x] **Test enum validation** — Verify invalid enum values fail with the list of allowed values in the error. | Status: done
+- [x] **Test optional field handling** — Verify that missing optional fields pass validation. | Status: done
 - [ ] **Test default value application** — Verify that fields with defaults are populated when missing. | Status: not_done
-- [ ] **Test global min/max field length** — Verify `validation.minFieldLength` and `maxFieldLength` apply to all string fields. | Status: not_done
-- [ ] **Test `nonEmpty` heuristic** — Verify whitespace-only strings are rejected. | Status: not_done
-- [ ] **Test `noPlaceholder` heuristic** — Verify placeholder text like "Lorem ipsum" is rejected. | Status: not_done
-- [ ] **Test `noDuplicateFields` heuristic** — Verify identical question/answer pairs are rejected. | Status: not_done
-- [ ] **Test `minWordCount` heuristic** — Verify fields with fewer than N words are rejected. | Status: not_done
-- [ ] **Test custom validator integration** — Verify custom validators are called and their failures are included in the result. | Status: not_done
-- [ ] **Write tests in `src/__tests__/validate.test.ts`** — Cover all validation and heuristic tests. | Status: not_done
+- [x] **Test global min/max field length** — Verify `validation.minFieldLength` and `maxFieldLength` apply to all string fields. | Status: done
+- [x] **Test `nonEmpty` heuristic** — Verify whitespace-only strings are rejected. | Status: done
+- [x] **Test `noPlaceholder` heuristic** — Verify placeholder text like "Lorem ipsum" is rejected. | Status: done
+- [x] **Test `noDuplicateFields` heuristic** — Verify identical question/answer pairs are rejected. | Status: done
+- [x] **Test `minWordCount` heuristic** — Verify fields with fewer than N words are rejected. | Status: done
+- [x] **Test custom validator integration** — Verify custom validators are called and their failures are included in the result. | Status: done
+- [x] **Write tests in `src/__tests__/validate.test.ts`** — Cover all validation and heuristic tests. | Status: done
 
 ---
 
@@ -155,98 +155,98 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 - [ ] **Construct retry prompt with validation feedback** — When `includeFeedback` is true, include validation error details in the retry prompt (field path, expected constraint, actual value). | Status: not_done
 - [ ] **Construct retry prompt for parse failures** — When the response is not valid JSON, tell the LLM: "The previous response was not valid JSON. Output ONLY a valid JSON object." | Status: not_done
 - [ ] **Implement backoff strategies** — Support `'none'` (immediate retry), `'linear'` (backoffMs * attempt), and `'exponential'` (backoffMs * 2^attempt) delays between retries. | Status: not_done
-- [ ] **Implement invalid example handling modes** — Support `'discard'` (drop from output), `'log'` (drop but record in `stats.invalidExamples`), and `'repair'` (include with `_meta.repaired: true` flag). | Status: not_done
+- [x] **Implement invalid example handling modes** — Support `'discard'` (drop from output), `'log'` (drop but record in `stats.invalidExamples`), and `'repair'` (include with `_meta.repaired: true` flag). | Status: done
 - [ ] **Track retry statistics** — Record total retries, per-example retry counts, and validation failure reasons with counts in `GenerationStats`. | Status: not_done
 
 ---
 
 ## Phase 7: Core Generate Pipeline
 
-- [ ] **Implement `generate()` function** — In `src/pipeline.ts`, wire up the full single-pass pipeline: build prompt (Stage 2), call LLM (Stage 3), parse and extract JSON (Stage 4), validate (Stage 4), retry on failure (Stage 5). Accumulate valid examples until target count is reached. | Status: not_done
-- [ ] **Track LLM call count** — Increment `stats.llmCalls` for every LLM function invocation (including retries). | Status: not_done
-- [ ] **Track token usage** — Accumulate `usage.promptTokens` and `usage.completionTokens` from each `LlmResponse` into `stats.tokens`. | Status: not_done
-- [ ] **Track wall-clock duration** — Record `Date.now()` at start and end of pipeline, store in `stats.durationMs`. | Status: not_done
+- [x] **Implement `generate()` function** — In `src/pipeline.ts`, wire up the full single-pass pipeline: build prompt (Stage 2), call LLM (Stage 3), parse and extract JSON (Stage 4), validate (Stage 4), retry on failure (Stage 5). Accumulate valid examples until target count is reached. | Status: done
+- [x] **Track LLM call count** — Increment `stats.llmCalls` for every LLM function invocation (including retries). | Status: done
+- [x] **Track token usage** — Accumulate `usage.promptTokens` and `usage.completionTokens` from each `LlmResponse` into `stats.tokens`. | Status: done
+- [x] **Track wall-clock duration** — Record `Date.now()` at start and end of pipeline, store in `stats.durationMs`. | Status: done
 - [ ] **Implement progress callback** — Call `onProgress` after each batch with current `generated`, `valid`, `target`, `batchIndex`, `percentComplete`, `elapsedMs`. | Status: not_done
 - [ ] **Implement AbortSignal support** — Check `signal.aborted` before each LLM call. If aborted, return partial results collected so far. | Status: not_done
-- [ ] **Assign `_meta` to each generated example** — Populate `id` (UUID or sequential), `index`, `batchIndex`, and `diversityContext` on each valid example. | Status: not_done
-- [ ] **Handle batch generation (batchSize > 1)** — When `batchSize > 1`, modify the prompt to request an array and parse each element of the returned array individually. | Status: not_done
-- [ ] **Wire deduplication into the pipeline** — After accumulating all valid examples, run deduplication before returning results. | Status: not_done
+- [x] **Assign `_meta` to each generated example** — Populate `id` (UUID or sequential), `index`, `batchIndex`, and `diversityContext` on each valid example. | Status: done
+- [x] **Handle batch generation (batchSize > 1)** — When `batchSize > 1`, modify the prompt to request an array and parse each element of the returned array individually. | Status: done
+- [x] **Wire deduplication into the pipeline** — After accumulating all valid examples, run deduplication before returning results. | Status: done
 - [ ] **Compute category distribution** — Count examples per category for enum fields and store in `stats.categoryDistribution`. | Status: not_done
-- [ ] **Export `generate` from `src/index.ts`** — Add the `generate` function to the public API. | Status: not_done
+- [x] **Export `generate` from `src/index.ts`** — Add the `generate` function to the public API. | Status: done
 
 ### Pipeline Tests
 
-- [ ] **Test full pipeline with mock LLM returning valid JSON** — Verify `generate()` returns the correct number of validated examples with correct stats. | Status: not_done
-- [ ] **Test pipeline with mock LLM returning invalid JSON on first call** — Verify retry logic kicks in and valid examples are eventually produced. | Status: not_done
+- [x] **Test full pipeline with mock LLM returning valid JSON** — Verify `generate()` returns the correct number of validated examples with correct stats. | Status: done
+- [x] **Test pipeline with mock LLM returning invalid JSON on first call** — Verify retry logic kicks in and valid examples are eventually produced. | Status: done
 - [ ] **Test pipeline with mock LLM returning unparseable text** — Verify parse failure triggers retry with appropriate feedback prompt. | Status: not_done
-- [ ] **Test pipeline with batchSize > 1** — Verify JSON arrays are parsed into individual examples, each validated separately. | Status: not_done
-- [ ] **Test pipeline tracks token usage correctly** — Verify `stats.tokens` accumulates from multiple LLM calls. | Status: not_done
-- [ ] **Test pipeline tracks LLM call count** — Verify `stats.llmCalls` includes retries. | Status: not_done
+- [x] **Test pipeline with batchSize > 1** — Verify JSON arrays are parsed into individual examples, each validated separately. | Status: done
+- [x] **Test pipeline tracks token usage correctly** — Verify `stats.tokens` accumulates from multiple LLM calls. | Status: done
+- [x] **Test pipeline tracks LLM call count** — Verify `stats.llmCalls` includes retries. | Status: done
 - [ ] **Test progress callback is called** — Verify `onProgress` fires after each batch with increasing progress values. | Status: not_done
 - [ ] **Test AbortSignal cancellation** — Verify pipeline stops and returns partial results when signal is aborted. | Status: not_done
-- [ ] **Test invalid handling modes** — Verify `'discard'` drops invalid examples, `'log'` records them in stats, `'repair'` includes them with meta flag. | Status: not_done
-- [ ] **Write tests in `src/__tests__/generate.test.ts`** — Cover all pipeline integration tests using mock LLM. | Status: not_done
+- [x] **Test invalid handling modes** — Verify `'discard'` drops invalid examples, `'log'` records them in stats, `'repair'` includes them with meta flag. | Status: done
+- [x] **Write tests in `src/__tests__/generate.test.ts`** — Cover all pipeline integration tests using mock LLM. | Status: done
 
 ---
 
 ## Phase 8: Exact Deduplication
 
-- [ ] **Implement text normalization** — In `src/dedup/exact.ts`, normalize string fields: lowercase, collapse whitespace, trim. Serialize non-string fields to canonical JSON (sorted keys). | Status: not_done
-- [ ] **Implement hash computation** — Concatenate normalized field values with a delimiter and compute SHA-256 truncated to 16 bytes. | Status: not_done
-- [ ] **Implement exact dedup** — Use a hash set to detect identical examples. Keep the first occurrence, discard duplicates. O(n) time and space. | Status: not_done
-- [ ] **Support per-field dedup** — When `fields` is specified, only normalize and hash the specified fields. | Status: not_done
+- [x] **Implement text normalization** — In `src/dedup/exact.ts`, normalize string fields: lowercase, collapse whitespace, trim. Serialize non-string fields to canonical JSON (sorted keys). | Status: done
+- [x] **Implement hash computation** — Concatenate normalized field values with a delimiter and compute SHA-256 truncated to 16 bytes. | Status: done
+- [x] **Implement exact dedup** — Use a hash set to detect identical examples. Keep the first occurrence, discard duplicates. O(n) time and space. | Status: done
+- [x] **Support per-field dedup** — When `fields` is specified, only normalize and hash the specified fields. | Status: done
 
 ---
 
 ## Phase 9: Near-Duplicate Detection
 
-- [ ] **Implement word n-gram extraction** — In `src/dedup/near.ts`, tokenize text fields and extract word n-grams (default: bigrams). | Status: not_done
-- [ ] **Implement Jaccard similarity computation** — Compute `|A intersect B| / |A union B|` for two n-gram sets. | Status: not_done
+- [x] **Implement word n-gram extraction** — In `src/dedup/near.ts`, tokenize text fields and extract word n-grams (default: bigrams). | Status: done
+- [x] **Implement Jaccard similarity computation** — Compute `|A intersect B| / |A union B|` for two n-gram sets. | Status: done
 - [ ] **Implement MinHash signature generation** — In `src/dedup/minhash.ts`, generate MinHash signatures using configurable number of hash functions (default: 128). | Status: not_done
 - [ ] **Implement LSH banding** — Divide MinHash signatures into bands (default: 16 bands of 8 hashes) and identify candidate pairs that share at least one identical band. | Status: not_done
 - [ ] **Implement near-duplicate dedup with LSH** — Use LSH to generate candidate pairs, then compute exact Jaccard similarity only for candidates. Remove examples exceeding the threshold (default: 0.85). | Status: not_done
-- [ ] **Support per-field near dedup** — When `fields` is specified, extract n-grams only from specified fields. | Status: not_done
-- [ ] **Keep first-generated instance on duplicate** — When two examples are duplicates, keep the one that was generated first (lower index). | Status: not_done
+- [x] **Support per-field near dedup** — When `fields` is specified, extract n-grams only from specified fields. | Status: done
+- [x] **Keep first-generated instance on duplicate** — When two examples are duplicates, keep the one that was generated first (lower index). | Status: done
 
 ---
 
 ## Phase 10: Semantic Deduplication
 
-- [ ] **Implement semantic dedup with pluggable embedder** — In `src/dedup/semantic.ts`, accept an `embedder` function, embed configured fields, and compute pairwise cosine similarity. Remove pairs exceeding threshold (default: 0.92). | Status: not_done
-- [ ] **Implement cosine similarity** — Compute `dot(a, b) / (||a|| * ||b||)` for two embedding vectors. | Status: not_done
+- [x] **Implement semantic dedup with pluggable embedder** — In `src/dedup/semantic.ts`, accept an `embedder` function, embed configured fields, and compute pairwise cosine similarity. Remove pairs exceeding threshold (default: 0.92). | Status: done
+- [x] **Implement cosine similarity** — Compute `dot(a, b) / (||a|| * ||b||)` for two embedding vectors. | Status: done
 - [ ] **Support field concatenation vs per-field averaging** — Configurable: either concatenate field values before embedding or embed per-field and average vectors. | Status: not_done
-- [ ] **Brute-force for small datasets** — Use brute-force pairwise comparison for datasets under 5,000 examples. | Status: not_done
+- [x] **Brute-force for small datasets** — Use brute-force pairwise comparison for datasets under 5,000 examples. | Status: done
 - [ ] **Support pluggable ANN index** — Accept an optional approximate nearest neighbor index for larger datasets. | Status: not_done
 
 ---
 
 ## Phase 11: Cross-Set Deduplication
 
-- [ ] **Implement cross-set dedup** — When `dedup.existingData` is provided, compare each generated example against the existing set and remove generated examples that are too similar to any existing example. | Status: not_done
+- [x] **Implement cross-set dedup** — When `dedup.existingData` is provided, compare each generated example against the existing set and remove generated examples that are too similar to any existing example. | Status: done
 - [ ] **Support all dedup strategies for cross-set** — Cross-set dedup should work with exact, near, and semantic strategies. | Status: not_done
 
 ---
 
 ## Phase 12: Standalone Deduplication API
 
-- [ ] **Implement `deduplicate()` standalone function** — Expose dedup as a standalone function in `src/index.ts`. Accept data array and `DedupOptions`, return `DedupResult` with `data`, `removed`, and `pairs`. | Status: not_done
-- [ ] **Wire exact, near, and semantic strategies** — Route to the appropriate dedup implementation based on `strategy` option. | Status: not_done
-- [ ] **Support `strategy: 'none'`** — When strategy is `'none'`, return data unchanged. | Status: not_done
+- [x] **Implement `deduplicate()` standalone function** — Expose dedup as a standalone function in `src/index.ts`. Accept data array and `DedupOptions`, return `DedupResult` with `data`, `removed`, and `pairs`. | Status: done
+- [x] **Wire exact, near, and semantic strategies** — Route to the appropriate dedup implementation based on `strategy` option. | Status: done
+- [x] **Support `strategy: 'none'`** — When strategy is `'none'`, return data unchanged. | Status: done
 
 ### Deduplication Tests
 
-- [ ] **Test exact dedup removes identical entries** — Verify exact duplicates are removed and unique entries are kept. | Status: not_done
-- [ ] **Test exact dedup with normalization** — Verify case differences and extra whitespace are treated as identical. | Status: not_done
-- [ ] **Test near-dedup with Jaccard similarity** — Verify examples above threshold are removed and below threshold are kept. | Status: not_done
-- [ ] **Test near-dedup with different thresholds** — Verify threshold configuration changes which pairs are considered duplicates. | Status: not_done
-- [ ] **Test near-dedup with custom n-gram size** — Verify unigrams, bigrams, and trigrams produce different similarity results. | Status: not_done
+- [x] **Test exact dedup removes identical entries** — Verify exact duplicates are removed and unique entries are kept. | Status: done
+- [x] **Test exact dedup with normalization** — Verify case differences and extra whitespace are treated as identical. | Status: done
+- [x] **Test near-dedup with Jaccard similarity** — Verify examples above threshold are removed and below threshold are kept. | Status: done
+- [x] **Test near-dedup with different thresholds** — Verify threshold configuration changes which pairs are considered duplicates. | Status: done
+- [x] **Test near-dedup with custom n-gram size** — Verify unigrams, bigrams, and trigrams produce different similarity results. | Status: done
 - [ ] **Test MinHash LSH matches brute-force** — Verify MinHash LSH produces the same results as brute-force Jaccard for a small dataset. | Status: not_done
-- [ ] **Test per-field dedup** — Verify dedup on specific fields ignores other fields for similarity comparison. | Status: not_done
-- [ ] **Test cross-set dedup** — Verify generated examples duplicating existing data are removed. | Status: not_done
+- [x] **Test per-field dedup** — Verify dedup on specific fields ignores other fields for similarity comparison. | Status: done
+- [x] **Test cross-set dedup** — Verify generated examples duplicating existing data are removed. | Status: done
 - [ ] **Test dedup idempotence** — Verify `deduplicate(deduplicate(data))` equals `deduplicate(data)`. | Status: not_done
-- [ ] **Test semantic dedup with mock embedder** — Verify cosine similarity dedup works with a mock embedding function. | Status: not_done
-- [ ] **Test `strategy: 'none'` returns data unchanged** — Verify no examples are removed. | Status: not_done
-- [ ] **Write tests in `src/__tests__/dedup.test.ts`** — Cover all dedup strategy tests. | Status: not_done
+- [x] **Test semantic dedup with mock embedder** — Verify cosine similarity dedup works with a mock embedding function. | Status: done
+- [x] **Test `strategy: 'none'` returns data unchanged** — Verify no examples are removed. | Status: done
+- [x] **Write tests in `src/__tests__/dedup.test.ts`** — Cover all dedup strategy tests. | Status: done
 - [ ] **Write tests in `src/__tests__/minhash.test.ts`** — Cover MinHash signature generation and LSH banding tests. | Status: not_done
 
 ---
@@ -255,29 +255,29 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ### OpenAI Fine-Tuning JSONL
 
-- [ ] **Implement OpenAI JSONL formatter** — In `src/export/openai.ts`, format each example as `{"messages": [{"role": "system", ...}, {"role": "user", ...}, {"role": "assistant", ...}]}` with one object per line. | Status: not_done
-- [ ] **Implement default field mapping for OpenAI** — Map `instruction`/first string field to user message, `output`/`response`/`answer`/last string field to assistant message, optional `system`/`system_prompt` to system message, `input` appended to user message if non-empty. | Status: not_done
-- [ ] **Support custom field mapping for OpenAI** — Accept `fieldMap` with `user`, `assistant`, `system` keys pointing to schema field names. | Status: not_done
-- [ ] **Support static system prompt for OpenAI** — Accept `systemPrompt` option to set the same system message for all examples. | Status: not_done
+- [x] **Implement OpenAI JSONL formatter** — In `src/export/openai.ts`, format each example as `{"messages": [{"role": "system", ...}, {"role": "user", ...}, {"role": "assistant", ...}]}` with one object per line. | Status: done
+- [x] **Implement default field mapping for OpenAI** — Map `instruction`/first string field to user message, `output`/`response`/`answer`/last string field to assistant message, optional `system`/`system_prompt` to system message, `input` appended to user message if non-empty. | Status: done
+- [x] **Support custom field mapping for OpenAI** — Accept `fieldMap` with `user`, `assistant`, `system` keys pointing to schema field names. | Status: done
+- [x] **Support static system prompt for OpenAI** — Accept `systemPrompt` option to set the same system message for all examples. | Status: done
 
 ### Alpaca Format
 
-- [ ] **Implement Alpaca formatter** — In `src/export/alpaca.ts`, format each example as `{"instruction": ..., "input": ..., "output": ...}` JSONL. | Status: not_done
-- [ ] **Implement default field mapping for Alpaca** — Map `instruction`/first string field, `input`/second string field, `output`/`response`/`answer`/last string field. | Status: not_done
+- [x] **Implement Alpaca formatter** — In `src/export/alpaca.ts`, format each example as `{"instruction": ..., "input": ..., "output": ...}` JSONL. | Status: done
+- [x] **Implement default field mapping for Alpaca** — Map `instruction`/first string field, `input`/second string field, `output`/`response`/`answer`/last string field. | Status: done
 
 ### ShareGPT Format
 
-- [ ] **Implement ShareGPT formatter** — In `src/export/sharegpt.ts`, format each example as `{"conversations": [{"from": "human", "value": ...}, {"from": "gpt", "value": ...}]}` JSONL. | Status: not_done
-- [ ] **Implement default field mapping for ShareGPT** — Map instruction to `human`, output to `gpt`, optional system to `system` role. | Status: not_done
+- [x] **Implement ShareGPT formatter** — In `src/export/sharegpt.ts`, format each example as `{"conversations": [{"from": "human", "value": ...}, {"from": "gpt", "value": ...}]}` JSONL. | Status: done
+- [x] **Implement default field mapping for ShareGPT** — Map instruction to `human`, output to `gpt`, optional system to `system` role. | Status: done
 
 ### Plain JSONL
 
-- [ ] **Implement plain JSONL formatter** — In `src/export/jsonl.ts`, serialize each example as one JSON object per line, preserving original schema field names. | Status: not_done
+- [x] **Implement plain JSONL formatter** — In `src/export/jsonl.ts`, serialize each example as one JSON object per line, preserving original schema field names. | Status: done
 
 ### CSV
 
-- [ ] **Implement CSV formatter** — In `src/export/csv.ts`, output header row and data rows. Handle comma, quote, and newline escaping in field values. | Status: not_done
-- [ ] **Support CSV options** — Accept `delimiter` (default: `,`), `quote` (default: `"`), `header` (default: true), `fields` (subset of fields to include). | Status: not_done
+- [x] **Implement CSV formatter** — In `src/export/csv.ts`, output header row and data rows. Handle comma, quote, and newline escaping in field values. | Status: done
+- [x] **Support CSV options** — Accept `delimiter` (default: `,`), `quote` (default: `"`), `header` (default: true), `fields` (subset of fields to include). | Status: done
 - [ ] **Handle nested objects and arrays in CSV** — Flatten nested objects with dot notation. JSON-serialize arrays within cells. | Status: not_done
 
 ### eval-dataset Format
@@ -292,23 +292,23 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ### Standalone Export API
 
-- [ ] **Implement `exportData()` standalone function** — Expose export as a standalone function in `src/index.ts`. Accept data array, format, and format-specific options. Return formatted string. | Status: not_done
+- [x] **Implement `exportData()` standalone function** — Expose export as a standalone function in `src/index.ts`. Accept data array, format, and format-specific options. Return formatted string. | Status: done
 
 ### Export Tests
 
-- [ ] **Test OpenAI JSONL output** — Verify correct message structure, field mapping, and system prompt injection. | Status: not_done
-- [ ] **Test OpenAI custom field mapping** — Verify custom `fieldMap` correctly maps schema fields to message roles. | Status: not_done
-- [ ] **Test Alpaca output** — Verify correct field structure and mapping. | Status: not_done
-- [ ] **Test ShareGPT output** — Verify correct conversation structure with human/gpt roles. | Status: not_done
-- [ ] **Test plain JSONL output** — Verify schema fields are preserved as-is, one object per line. | Status: not_done
-- [ ] **Test CSV output with escaping** — Verify commas, quotes, and newlines in field values are correctly escaped. | Status: not_done
-- [ ] **Test CSV field subset** — Verify `fields` option limits which columns appear. | Status: not_done
-- [ ] **Test CSV header toggle** — Verify `header: false` omits the header row. | Status: not_done
+- [x] **Test OpenAI JSONL output** — Verify correct message structure, field mapping, and system prompt injection. | Status: done
+- [x] **Test OpenAI custom field mapping** — Verify custom `fieldMap` correctly maps schema fields to message roles. | Status: done
+- [x] **Test Alpaca output** — Verify correct field structure and mapping. | Status: done
+- [x] **Test ShareGPT output** — Verify correct conversation structure with human/gpt roles. | Status: done
+- [x] **Test plain JSONL output** — Verify schema fields are preserved as-is, one object per line. | Status: done
+- [x] **Test CSV output with escaping** — Verify commas, quotes, and newlines in field values are correctly escaped. | Status: done
+- [x] **Test CSV field subset** — Verify `fields` option limits which columns appear. | Status: done
+- [x] **Test CSV header toggle** — Verify `header: false` omits the header row. | Status: done
 - [ ] **Test eval-dataset output** — Verify correct field mapping, tag merging, metadata population, and sequential IDs. | Status: not_done
 - [ ] **Test custom format template** — Verify template function is called for each example with correct index. | Status: not_done
 - [ ] **Test export-parse round-trip for JSONL** — Verify `JSON.parse(line)` on each JSONL line matches expected structure. | Status: not_done
 - [ ] **Test export-parse round-trip for Alpaca** — Verify round-trip fidelity for Alpaca format. | Status: not_done
-- [ ] **Write tests in `src/__tests__/export.test.ts`** — Cover all export format tests. | Status: not_done
+- [x] **Write tests in `src/__tests__/export.test.ts`** — Cover all export format tests. | Status: done
 
 ---
 
@@ -316,10 +316,10 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ### Temperature Variation
 
-- [ ] **Implement `linear` temperature strategy** — Linearly interpolate from `min` to `max` across all batches. Batch 1 uses `min`, last batch uses `max`. | Status: not_done
-- [ ] **Implement `cycle` temperature strategy** — Cycle through `[min, mid, max, mid, min, ...]` across batches. | Status: not_done
-- [ ] **Implement `random` temperature strategy** — Random temperature between `min` and `max` per batch. | Status: not_done
-- [ ] **Pass temperature to LLM function** — Set `options.temperature` in the `LlmCallOptions` for each batch based on the active temperature strategy. | Status: not_done
+- [x] **Implement `linear` temperature strategy** — Linearly interpolate from `min` to `max` across all batches. Batch 1 uses `min`, last batch uses `max`. | Status: done
+- [x] **Implement `cycle` temperature strategy** — Cycle through `[min, mid, max, mid, min, ...]` across batches. | Status: done
+- [x] **Implement `random` temperature strategy** — Random temperature between `min` and `max` per batch. | Status: done
+- [x] **Pass temperature to LLM function** — Set `options.temperature` in the `LlmCallOptions` for each batch based on the active temperature strategy. | Status: done
 
 ### Topic Rotation
 
@@ -385,9 +385,9 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ## Phase 16: Standalone Validate API
 
-- [ ] **Implement `validate()` standalone function** — Accept an array of data objects and a schema (Zod or JSON Schema). Return `ValidationResult[]` with per-example results. | Status: not_done
+- [x] **Implement `validate()` standalone function** — Accept an array of data objects and a schema (Zod or JSON Schema). Return `ValidationResult[]` with per-example results. | Status: done
 - [ ] **Support both Zod and JSON Schema input** — Auto-detect schema type and convert JSON Schema to Zod if needed. | Status: not_done
-- [ ] **Export `validate` from `src/index.ts`** — Add to public API. | Status: not_done
+- [x] **Export `validate` from `src/index.ts`** — Add to public API. | Status: done
 
 ---
 
@@ -409,8 +409,8 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 ### Cost Tracking
 
 - [ ] **Implement cost accumulator** — In `src/llm/cost.ts`, track cumulative token usage and compute cost based on `CostConfig` rates. | Status: not_done
-- [ ] **Calculate total cost** — `totalCost = promptTokens * promptTokenCost + completionTokens * completionTokenCost`. | Status: not_done
-- [ ] **Default currency** — Default to `'USD'` when currency is not specified. | Status: not_done
+- [x] **Calculate total cost** — `totalCost = promptTokens * promptTokenCost + completionTokens * completionTokenCost`. | Status: done
+- [x] **Default currency** — Default to `'USD'` when currency is not specified. | Status: done
 
 ### Adapter Tests
 
@@ -497,7 +497,7 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 
 ## Phase 20: Structured Output Mode
 
-- [ ] **Implement structured output flag passthrough** — When `structuredOutput: true`, set `jsonMode: true` in `LlmCallOptions`. | Status: not_done
+- [x] **Implement structured output flag passthrough** — When `structuredOutput: true`, set `jsonMode: true` in `LlmCallOptions`. | Status: done
 - [ ] **Skip JSON extraction in structured mode** — When structured output is enabled, parse the entire response as JSON without scanning for JSON fragments. | Status: not_done
 
 ---
@@ -518,7 +518,7 @@ This file tracks all implementation tasks derived from `SPEC.md`. Tasks are orga
 - [ ] **Property test: export-parse round-trip** — For JSONL and Alpaca formats, `parse(export(data))` equals `data`. | Status: not_done
 - [ ] **Property test: count guarantee** — `generateBatch(schema, n).data.length <= n`. Never more than requested. | Status: not_done
 - [ ] **Edge case: empty seed array** — Verify `generate()` works with no seeds provided. | Status: not_done
-- [ ] **Edge case: single example generation (count: 1)** — Verify pipeline works for generating a single example. | Status: not_done
+- [x] **Edge case: single example generation (count: 1)** — Verify pipeline works for generating a single example. | Status: done
 - [ ] **Edge case: LLM returns empty string** — Verify pipeline handles empty LLM response gracefully. | Status: not_done
 - [ ] **Edge case: LLM returns only markdown text** — Verify pipeline detects no JSON and retries. | Status: not_done
 - [ ] **Edge case: all generated examples are duplicates** — Verify pipeline continues generating until unique examples are found or max iterations reached. | Status: not_done
