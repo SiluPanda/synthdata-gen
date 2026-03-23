@@ -1,6 +1,6 @@
 {
   "name": "synthdata-gen",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Generate and validate synthetic training data using any LLM",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

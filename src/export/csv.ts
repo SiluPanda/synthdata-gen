@@ -3,11 +3,11 @@ import type { ExportOptions } from '../types';
 /**
  * Escape a value for CSV output.
  */
-function escapeCSV(value: unknown, quote: string): string {
+function escapeCSV(value: unknown, quote: string, delimiter: string): string {
   if (value === null || value === undefined) return '';
   const str = typeof value === 'string' ? value : JSON.stringify(value);
   // If the value contains the quote character, delimiter, or newlines, wrap it
-  if (str.includes(quote) || str.includes(',') || str.includes('\n') || str.includes('\r')) {
+  if (str.includes(quote) || str.includes(delimiter) || str.includes('\n') || str.includes('\r')) {
     const escaped = str.replace(new RegExp(escapeRegex(quote), 'g'), quote + quote);
     return `${quote}${escaped}${quote}`;
   }
@@ -42,7 +42,7 @@ export function exportCSV(
   }
 
   for (const example of examples) {
-    const values = columns.map(col => escapeCSV(example[col], quote));
+    const values = columns.map(col => escapeCSV(example[col], quote, delimiter));
     lines.push(values.join(delimiter));
   }
 

@@ -190,6 +190,21 @@ describe('exportCSV', () => {
     expect(header).toContain('\t');
   });
 
+  it('should escape values containing custom delimiter', () => {
+    const data = [{ text: 'hello\tworld', label: 'test' }];
+    const result = exportCSV(data, { delimiter: '\t' });
+    // Value containing tab delimiter should be quoted
+    expect(result).toContain('"hello\tworld"');
+  });
+
+  it('should not quote values with commas when using tab delimiter', () => {
+    const data = [{ text: 'hello, world', label: 'test' }];
+    const result = exportCSV(data, { delimiter: '\t' });
+    // Comma is not the delimiter, so no quoting needed
+    expect(result).not.toContain('"hello, world"');
+    expect(result).toContain('hello, world');
+  });
+
   it('should support suppressing header', () => {
     const result = exportCSV(examples, { header: false });
     const lines = result.split('\n');
