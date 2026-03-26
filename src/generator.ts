@@ -4,7 +4,7 @@ import type { ExampleSchema, SchemaField } from './types';
  * Simple seeded pseudo-random number generator (mulberry32).
  * Provides deterministic randomness for reproducible generation.
  */
-class SeededRandom {
+export class SeededRandom {
   private state: number;
 
   constructor(seed?: number) {

@@ -406,3 +406,36 @@ describe('generate - edge cases', () => {
     expect(uniqueIds.size).toBe(ids.length);
   });
 });
+
+// ── Reproducibility with random diversity strategy ──
+
+describe('generate - getTemperature reproducibility', () => {
+  it('should produce identical temperatures across runs with random strategy', async () => {
+    const temperatures: number[][] = [[], []];
+
+    for (let run = 0; run < 2; run++) {
+      const mockLlm: LlmFunction = async (_messages, options) => {
+        temperatures[run].push(options?.temperature ?? -1);
+        return {
+          content: JSON.stringify({
+            instruction: 'Explain the concept of recursion in programming',
+            output: 'Recursion is a technique where a function calls itself to solve smaller instances of the same problem.',
+            category: 'coding',
+          }),
+        };
+      };
+
+      await generate(simpleSchema, {
+        count: 5,
+        llm: mockLlm,
+        diversity: {
+          temperature: { min: 0.3, max: 1.2, strategy: 'random' },
+        },
+        dedup: { strategy: 'none' },
+      });
+    }
+
+    expect(temperatures[0].length).toBeGreaterThan(0);
+    expect(temperatures[0]).toEqual(temperatures[1]);
+  });
+});

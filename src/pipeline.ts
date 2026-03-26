@@ -8,7 +8,7 @@ import type {
 } from './types';
 import { validateExample } from './validator';
 import { deduplicate } from './dedup';
-import { generateExamples, buildSystemPrompt, parseJsonResponse } from './generator';
+import { generateExamples, buildSystemPrompt, parseJsonResponse, SeededRandom } from './generator';
 import { exportAs } from './export/index';
 
 /**
@@ -61,6 +61,7 @@ async function generateWithLlm(
   options: GenerateOptions,
   batchIndex: number,
   batchSize: number,
+  rng: SeededRandom,
 ): Promise<{ examples: Record<string, unknown>[]; stats: Partial<GenerationStats> }> {
   if (!options.llm) {
     throw new Error('LLM function is required for LLM-based generation');
@@ -92,7 +93,7 @@ async function generateWithLlm(
 
   const response = await options.llm(messages, {
     temperature: options.diversity?.temperature
-      ? getTemperature(options.diversity.temperature, batchIndex)
+      ? getTemperature(options.diversity.temperature, batchIndex, rng)
       : undefined,
     jsonMode: options.structuredOutput,
   });
@@ -124,10 +125,11 @@ async function generateWithLlm(
 function getTemperature(
   config: { min: number; max: number; strategy: string },
   batchIndex: number,
+  rng: SeededRandom,
 ): number {
   switch (config.strategy) {
     case 'random':
-      return config.min + Math.random() * (config.max - config.min);
+      return config.min + rng.next() * (config.max - config.min);
     case 'cycle': {
       const mid = (config.min + config.max) / 2;
       const positions = [config.min, mid, config.max, mid];
@@ -158,6 +160,9 @@ export async function generate(
   const batchSize = options.batchSize || 1;
   const maxRetries = options.retry?.maxRetries ?? 3;
 
+  // Seeded PRNG for reproducible temperature selection
+  const rng = new SeededRandom(42);
+
   // Calculate number of batches needed (generate extra to account for dedup/validation losses)
   const oversampleFactor = 1.3;
   const targetRaw = Math.ceil(count * oversampleFactor);
@@ -179,7 +184,7 @@ export async function generate(
 
       while (retries <= maxRetries) {
         try {
-          const result = await generateWithLlm(schema, options, batchIdx, batchSize);
+          const result = await generateWithLlm(schema, options, batchIdx, batchSize, rng);
           rawExamples = result.examples;
 
           // Accumulate LLM stats
